@@ -62,7 +62,8 @@ WHERE `departments`.`name` = 'Dipartimento di Matematica';
 --   superare ciascuno dei suoi esami
 SELECT `students`.`id`, `students`.`name`, `students`.`surname`, 
 		`exams`.`course_id`, 
-		`courses`.`name`, COUNT(*) 
+		`courses`.`name`, COUNT(*) AS `tentativi`, 
+        MAX(`exam_student`.`vote`) AS `voto_massimo`
 FROM `students`
 JOIN `exam_student`
 	ON `exam_student`.`student_id` = `students`.`id`
@@ -70,4 +71,5 @@ JOIN `exams`
 	ON `exam_student`.`exam_id` = `exams`.`id`
 JOIN `courses`
 	ON `exams`.`course_id` = `courses`.`id`
-GROUP BY `students`.`id`, `exams`.`course_id`;
+GROUP BY `students`.`id`, `exams`.`course_id`
+	HAVING `voto_massimo` >= 18
